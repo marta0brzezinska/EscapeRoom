@@ -1,16 +1,22 @@
 {-# LANGUAGE LambdaCase #-}
 module Engine.ItemParser where
-    import Engine.Game
+    --import Engine.Game
     import System.IO
     import Control.Monad.State.Strict
+    import Control.Applicative
+
+    data Item = Item{
+        name::String,
+        itemDesc::String
+    }deriving(Show)
 
     readItemFile :: IO [String]
     readItemFile = lines <$> readFile "src/Data/Items.txt"
 
     type Parser a = StateT String [] a
 
-    letter :: Parser Char
-    letter = StateT $ \case 
+    character :: Parser Char
+    character = StateT $ \case
                         []     -> []
                         (x:xs) -> [(x,xs)]
 
@@ -19,9 +25,19 @@ module Engine.ItemParser where
 
     sat :: (Char -> Bool) -> Parser Char
     sat chi = do
-        x <- letter
+        x <- character
         if chi x then return x else zero
 
-    isLetter x = x/=';'
+    isLetter x = x/=';' && x/='.'
 
-    
+    letter = sat isLetter
+
+    stringi :: Parser String
+    stringi = many letter
+
+    itemParser = do
+        n<-stringi
+        id<-stringi
+        return (Item n id)
+
+        
