@@ -1,11 +1,7 @@
 module Engine.Game where
     import System.IO
     import Control.Monad.State.Strict
-
-    data Item = Item{
-        name::String,
-        itemDesc::String
-    }deriving(Show)
+    import Engine.Item
 
     data Room = Room{
         number::Int,

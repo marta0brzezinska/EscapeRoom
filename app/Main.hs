@@ -11,4 +11,5 @@ import Engine.ItemParser
 main :: IO ()
 main = do
     [str,strs] <- readItemFile
+    runStateT itemParser str
     return ()
