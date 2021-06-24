@@ -9,8 +9,8 @@ module Engine.Item where
         itemDesc::String
     }deriving(Show)
     
-    readItemFile :: IO [String]
-    readItemFile = lines <$> readFile "src/Data/Items.txt"
+    readItemFile :: IO String
+    readItemFile = readFile "src/Data/Items.txt"
 
     type Parser a = StateT String [] a
 
@@ -36,10 +36,23 @@ module Engine.Item where
     drugi:: Parser String
     drugi = many (sat isntPoint)
 
+    itemParser :: Parser Item
     itemParser = do
         n<-pierwszy
-        modify(\(x:xs)->xs)
+        sat (==';')
         id<-drugi
         return (Item n id)
+
+    itemsParser :: Parser Item
+    itemsParser = do
+        x<-itemParser
+        sat (=='\n')
+        return x
+
+    initializeItems :: Parser [Item]
+    initializeItems = many itemsParser
+
+    
+
 
     
