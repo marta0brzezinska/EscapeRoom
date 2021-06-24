@@ -9,13 +9,9 @@ import System.IO.Error
 import Engine.Item
 import Engine.Room
 import Engine.Action
+import Engine.Game
 
 main :: IO ()
 main = do
-    str <- readItemFile
-    print $ fst $ head $ runStateT initializeItems str
-    str2 <- readRoomFile
-    print $ fst $ head $ runStateT initializeRooms str2
-    str3 <- readActionFile
-    print $ fst $ head $ runStateT initializeActions str3
+    --runStateT initializeGame
     return ()

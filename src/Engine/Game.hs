@@ -6,12 +6,18 @@ module Engine.Game where
     import Engine.Action
 
     data StanGry = StanGry{
-        room::Room,
+        rooms::[Room],
         items::[Item],
         actions::[Action]
     }deriving (Show)
 
     type GameIO = StateT StanGry IO
 
-    --initializeGame::GameIO ()
-    --initializeGame = do
+    initializeGame::GameIO ()
+    initializeGame = do
+        roomsStr <- lift readItemFile
+        itemsStr <- lift readItemFile
+        actionsStr <- lift readItemFile
+        modify(const(StanGry (fst $ head $ runStateT initializeRooms roomsStr) (fst $ head $ runStateT initializeItems itemsStr) (fst $ head $ runStateT initializeActions actionsStr)))
+
+
