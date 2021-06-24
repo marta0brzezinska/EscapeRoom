@@ -3,6 +3,7 @@ module Engine.Item where
     import System.IO
     import Control.Monad.State.Strict
     import Control.Applicative
+    import Engine.Parser
 
     data Item = Item{
         name::String,
@@ -12,41 +13,23 @@ module Engine.Item where
     readItemFile :: IO String
     readItemFile = readFile "src/Data/Items.txt"
 
-    type Parser a = StateT String [] a
+    parseItemName :: Parser String
+    parseItemName = many (sat isntSemi)
 
-    character :: Parser Char
-    character = StateT $ \case
-                        []     -> []
-                        (x:xs) -> [(x,xs)]
-
-    zero :: Parser a
-    zero = mzero
-
-    sat :: (Char -> Bool) -> Parser Char
-    sat chi = do
-        x <- character
-        if chi x then return x else zero
-
-    isntSemi x = x/=';'
-    isntPoint x = x/='\n'
-
-    pierwszy :: Parser String
-    pierwszy = many (sat isntSemi)
-
-    drugi:: Parser String
-    drugi = many (sat isntPoint)
+    parseItemDesc:: Parser String
+    parseItemDesc = many (sat isntEnd)
 
     itemParser :: Parser Item
     itemParser = do
-        n<-pierwszy
-        sat (==';')
-        id<-drugi
-        return (Item n id)
+        name<-parseItemName
+        sat isSemi
+        itDesc<-parseItemDesc
+        return (Item name itDesc)
 
     itemsParser :: Parser Item
     itemsParser = do
         x<-itemParser
-        sat (=='\n')
+        sat isEnd
         return x
 
     initializeItems :: Parser [Item]

@@ -25,8 +25,11 @@ source-repository head
 
 library
   exposed-modules:
+      Engine.Action
       Engine.Game
       Engine.Item
+      Engine.Parser
+      Engine.Room
       Lib
   other-modules:
       Paths_EscapeRoom

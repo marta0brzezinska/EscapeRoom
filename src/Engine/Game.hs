@@ -2,16 +2,8 @@ module Engine.Game where
     import System.IO
     import Control.Monad.State.Strict
     import Engine.Item
-
-    data Room = Room{
-        number::Int,
-        roomDesc::String
-    }deriving(Show)
-
-    data Action = Action{
-        actDecs::String,
-        used::Bool 
-    }deriving(Show)
+    import Engine.Room
+    import Engine.Action
 
     data StanGry = StanGry{
         room::Room,

@@ -1,1 +1,1 @@
-podnieś klucz;0
+pick up key;0
