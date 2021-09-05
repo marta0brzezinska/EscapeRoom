@@ -73,7 +73,7 @@ module Engine.Action where
     initializeActions :: Parser [Action]
     initializeActions = many actionsParser
 
-    -- | This function determines whether or not the Action can be performed based on the actReq argument
+    -- | This function determines whether or not the given Action can be performed based on the actReq argument
     canBeUsed::[Item]->Int->Action->Bool 
     canBeUsed items currRoom (Action _ actType actReq _ _ _ _)
         | actType==1 && any (actReq =**) items = True 

@@ -11,16 +11,16 @@ import Engine.Room
 import Engine.Action
 import Engine.Game
 
+-- | This function represents the round of the game and loops if the message does not indicate the end of the gameopen door
 play = do
   act <- lift readAction
   info <- updateGame act
-  unless (info == "You are outside") $ do -- if the distance is zero, the game halts
-    play --otherwise, continue guessing. this loops the play function into calling itself until the player makes a correct guess
+  unless (info == "You are outside.") $ do
+    play
 
+-- | This is the main function that starts the game
 main :: IO ()
---main = evalStateT play (initializeGame initPair)
 main =  do
-  nern <- execStateT initializeGame (GameState [] [] [] 0 "") --initialize the game and write the current state into nern
-  evalStateT play nern --pass the current state to a transformative function which will apply play to it until the game halts
+  firstState <- execStateT initializeGame (GameState [] [] [] 0 "")
+  evalStateT play firstState
   return ()
---3 END
