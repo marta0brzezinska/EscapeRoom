@@ -1,2 +1,5 @@
+import ItemsTest as IT
+import ParserTest as PT
+
 main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+main = PT.test

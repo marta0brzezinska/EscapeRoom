@@ -1,1 +1,1 @@
-1;You're in a small dark room. Last rays of the sun are seeping in from behind the blinds. There's a door in front of you, desk on your right and bed on your left.
+1;Bedroom;You're in a small dark room. Last rays of the sun are seeping in from behind the blinds. There's a door in front of you, desk on your right and bed on your left.

@@ -1,2 +1,3 @@
-Key;It looks like it opens a door.
-Book;It smells really nice.
+1;Key;It looks like it opens a door.;1
+2;Book;It smells really nice.;1
+3;TV;It looks old but it seems like it still works.;2
