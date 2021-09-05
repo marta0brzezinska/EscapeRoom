@@ -21,14 +21,20 @@ module Engine.Game where
 
     type GameIO = StateT GameState IO
 
-    -- | This function initializes the game based on the game files
+    -- | This function initializes the game based on the game files and prints the description of the first location
     initializeGame::GameIO ()
     initializeGame = do
-        roomsStr <- lift readItemFile
+        roomsStr <- lift readRoomFile
         itemsStr <- lift readItemFile
-        actionsStr <- lift readItemFile
-        modify(const(GameState (fst $ head $ runStateT initializeRooms roomsStr) (fst $ head $ runStateT initializeItems itemsStr) (fst $ head $ runStateT initializeActions actionsStr) 1 ""))
+        actionsStr <- lift readActionFile
+        let rooms = fst $ head $ runStateT initializeRooms roomsStr
+        let items = fst $ head $ runStateT initializeItems itemsStr
+        let actions = fst $ head $ runStateT initializeActions actionsStr
+        modify(const(GameState rooms items actions 1 ""))
         liftIO $ putStrLn "Game starts now."
+        let currRoom = head (filter (1 =****) rooms)
+        let info = roomDescription currRoom
+        liftIO $ putStrLn info
 
     -- | This function reads description of the action from the user
     readAction:: IO String
@@ -68,9 +74,10 @@ module Engine.Game where
             canCurrActionBeUsed = canBeUsed items currRoom currAction
             (newCurrRoom, newItems, newInfo) = updageGameState canCurrActionBeUsed currAction currRoom rooms items
     
-    -- | This function updates the state of the game and returns info to be displayed to the user
+    -- | This function updates the state of the game and returns info displayed to the user
     updateGame :: String -> GameIO String
     updateGame act = do
         modify (makeAction act)
         (GameState rooms items actions currRoom info) <- get
+        lift $ putStr info
         return info
