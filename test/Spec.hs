@@ -1,4 +1,4 @@
-import ItemsTest as IT
+--import ItemsTest as IT
 import ParserTest as PT
 
 main :: IO ()
