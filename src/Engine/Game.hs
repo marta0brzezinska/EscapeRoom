@@ -40,30 +40,37 @@ module Engine.Game where
     readAction:: IO String
     readAction = do
         putStrLn "What do you do?"
-        readLn
+        getLine
 
     -- | This function changes the number of owned items in the given list of items based on the given number of the item
     addItems::Int->[Item]->[Item]
     addItems actEffect items =  map(\(Item itemNumber itemName itDesc itemOwned) -> if actEffect==itemNumber then Item itemNumber itemName itDesc (itemOwned+1) else Item itemNumber itemName itDesc itemOwned) items
 
+    -- | This function returns the description of the players inventory
+    checkInventory::[Item]->String
+    checkInventory items = do
+            let itemsOwned = filter (1>=*) items
+            if null itemsOwned then "Your inventory is empty. " else "Items in your inventory: \n" ++ itemsDescription itemsOwned
+
     -- | This function returns description of the item from the given list of items based on the given number of the item
     itemInfo::[Item]->Int->String
     itemInfo items actEffect = do
-        let currItem = head (filter (actEffect =***) items)
-        itemDescription currItem
+        let currItems = filter (actEffect =***) items
+        if null currItems then "No item no. "++ show actEffect else itemDescription (head currItems)
 
     -- | This function returns description of the room from the given list of rooms based on the given number of the room
     roomInfo::[Room]->Int->String
     roomInfo rooms actEffect = do
-        let currRoom = head (filter (actEffect =****) rooms)
-        roomDescription currRoom
+        let currRooms = filter (actEffect =****) rooms
+        if null currRooms then "No room no. "++ show actEffect else roomDescription (head currRooms)
 
     -- | This function updates the currRoom, items and info arguments based on whether or not the Action can be used, the given Action, currRoom, rooms and items
     updageGameState::Bool->Action->Int->[Room]->[Item]->(Int, [Item], String)
     updageGameState canCurrActionBeUsed (Action _ actType _ actSucc actFail actEffect _) currRoom rooms items
-        |canCurrActionBeUsed && actType==1 = (currRoom, addItems actEffect items, actSucc ++ "/n" ++ itemInfo items actEffect)
-        |canCurrActionBeUsed && actType==2 = (actEffect, items, actSucc ++ "/n" ++ roomInfo rooms actEffect)
-        |otherwise = (currRoom, items, actFail)
+        |actType==0 = (currRoom, items, checkInventory items ++ "\n")
+        |canCurrActionBeUsed && actType==1 = (currRoom, addItems actEffect items, actSucc ++ itemInfo items actEffect ++ "\n")
+        |canCurrActionBeUsed && actType==2 = (actEffect, items, actSucc ++ roomInfo rooms actEffect ++ "\n")
+        |otherwise = (currRoom, items, actFail ++ "\n")
 
     -- | This function changes the state of the game based on the given description of the action
     makeAction:: String-> GameState -> GameState

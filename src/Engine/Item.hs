@@ -15,7 +15,11 @@ module Engine.Item where
         itemDesc::String,
         -- | This the number of Items owned
         itemOwned::Int 
-    }deriving(Show)
+    }
+
+    -- | This is the definition of show function for an Item
+    instance Show Item where
+         show (Item _ itemName itemDesc itemOwned) = itemName ++ ": " ++ itemDesc ++ " You have " ++ show itemOwned ++ " of them."
 
     -- | This function checks if the given integer is the number of the given Item and if the item is owned by the player
     (=**)::Int->Item->Bool 
@@ -24,6 +28,9 @@ module Engine.Item where
     -- | This function checks if the given integer is the number of the given Item
     (=***)::Int->Item->Bool 
     (=***) actEffect (Item itemNumber _ _ _) = itemNumber==actEffect
+
+    (>=*)::Int->Item->Bool
+    (>=*) int (Item _ _ _ itemOwned) = itemOwned>=int
 
     -- | This function reads the file containing Items data
     readItemFile :: IO String
@@ -71,3 +78,7 @@ module Engine.Item where
     -- | This function returns the description of the given Item
     itemDescription::Item->String
     itemDescription (Item _ _ itemDesc _) = itemDesc
+
+    itemsDescription::[Item]->String
+    itemsDescription [] = ""
+    itemsDescription (item:items) = show item ++ "\n" ++ itemsDescription items

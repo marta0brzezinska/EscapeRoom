@@ -76,8 +76,8 @@ module Engine.Action where
     -- | This function determines whether or not the given Action can be performed based on the actReq argument
     canBeUsed::[Item]->Int->Action->Bool 
     canBeUsed items currRoom (Action _ actType actReq _ _ _ _)
-        | actType==1 && any (actReq =**) items = True 
-        | actType==2 && actReq==currRoom = True 
+        | actType==2 && any (actReq =**) items = True 
+        | actType==1 && actReq==currRoom = True 
         | otherwise = False
 
     -- | This function changes the actUsed argument of the Action to 1 meaning the action has been performed succesfully

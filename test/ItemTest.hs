@@ -1,4 +1,4 @@
-module ItemsTest where
+module ItemTest where
 
 import Test.QuickCheck
 import Control.Monad.Trans.Class
