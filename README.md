@@ -7,4 +7,3 @@
 ## Step-by-step succesfull playthrough:
 1. type "pick up key"
 2. type "open door"
-3. type "open window"
