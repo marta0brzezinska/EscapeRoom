@@ -17,42 +17,43 @@ module Engine.Item where
         itemOwned::Int 
     }
 
-    -- | This is the definition of show function for an Item
+    -- | This is the definition of show function for data type Item
     instance Show Item where
          show (Item _ itemName itemDesc itemOwned) = itemName ++ ": " ++ itemDesc ++ " You have " ++ show itemOwned ++ " of them."
 
     -- | This function checks if the given integer is the number of the given Item and if the item is owned by the player
-    (=**)::Int->Item->Bool 
-    (=**) actReq (Item itemNumber _ _ itemOwned) = itemOwned>=1 && itemNumber==actReq
+    isOwnedItem::Int->Item->Bool 
+    isOwnedItem actReq (Item itemNumber _ _ itemOwned) = itemOwned>=1 && itemNumber==actReq
 
     -- | This function checks if the given integer is the number of the given Item
-    (=***)::Int->Item->Bool 
-    (=***) actEffect (Item itemNumber _ _ _) = itemNumber==actEffect
+    isItemNumber::Int->Item->Bool 
+    isItemNumber actEffect (Item itemNumber _ _ _) = itemNumber==actEffect
 
-    (>=*)::Int->Item->Bool
-    (>=*) int (Item itemNumber _ _ itemOwned) = itemNumber>0 && itemOwned>=int
+    -- | This function checks if actual Item is owned in at least int copies
+    isOwnedInCopies::Int->Item->Bool
+    isOwnedInCopies int (Item itemNumber _ _ itemOwned) = itemNumber>0 && itemOwned>=int
 
     -- | This function reads the file containing Items data
     readItemFile :: IO String
     readItemFile = readFile "src/Data/Items.txt"
 
-    -- | This function parses the number of the Item
+    -- | This function returns Parser of the number of the Item
     parseItemNumber:: Parser Int
     parseItemNumber = read <$> many (sat isntSemi)
 
-    -- | This function parses the name of the Item
+    -- | This function returns Parser of the name of the Item
     parseItemName :: Parser String
     parseItemName = many (sat isntSemi)
 
-    -- | This function parses the description of the Item
+    -- | This function returns Parser of the description of the Item
     parseItemDesc:: Parser String
     parseItemDesc = many (sat isntSemi)
 
-    -- | This function parser the number of Items owned
+    -- | This function returns Parser of the number of Items owned
     parseActionOwned:: Parser Int
     parseActionOwned = read <$> many (sat isntEnd)
 
-    -- | This function parses the Item
+    -- | This function returns Parser of the Item
     itemParser :: Parser Item
     itemParser = do
         itemNumber<-parseItemNumber
@@ -64,21 +65,18 @@ module Engine.Item where
         itemOwned<-parseActionOwned
         return (Item itemNumber itemName itemDesc itemOwned)
 
-    -- | This function parses the Item and skips the end of the line
+    -- | This function returns Parser of the Item and skips the end of the line
     itemsParser :: Parser Item
     itemsParser = do
         x<-itemParser
         sat isEnd
         return x
 
-    -- | This function parses the list of the Items
+    -- | This function returns the Parser of the list of the Items
     initializeItems :: Parser [Item]
     initializeItems = many itemsParser
 
-    -- | This function returns the description of the given Item
-    itemDescription::Item->String
-    itemDescription (Item _ _ itemDesc _) = itemDesc
-
+    -- | This function returns full descriptions of items on the given list
     itemsDescription::[Item]->String
     itemsDescription [] = ""
     itemsDescription (item:items) = "\n" ++ show item ++ itemsDescription items

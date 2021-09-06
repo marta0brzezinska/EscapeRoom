@@ -16,26 +16,26 @@ module Engine.Room where
     }deriving(Show)
 
     -- | This function checks if the given integer is the number of the given Room
-    (=****)::Int->Room->Bool 
-    (=****) actEffect (Room roomNumber _ _) = roomNumber==actEffect
+    isRoomNumber::Int->Room->Bool 
+    isRoomNumber actEffect (Room roomNumber _ _) = roomNumber==actEffect
     
     -- | This function reads the file containing Rooms data
     readRoomFile :: IO String
     readRoomFile = readFile "src/Data/Rooms.txt"
 
-    -- | This function parses the number of the Room
+    -- | This function returns Parser of the number of the Room
     parseRoomNumber :: Parser Int
     parseRoomNumber = read <$> many (sat isntSemi)
 
-    -- | This function parses the name of the Room
+    -- | This function returns Parser of the name of the Room
     parseRoomName:: Parser String
     parseRoomName = many (sat isntSemi)
 
-    -- | This function parses the description of the Room
+    -- | This function returns Parser of the description of the Room
     parseRoomDesc:: Parser String
     parseRoomDesc = many (sat isntEnd)
 
-    -- | This function parses the Room
+    -- | This function returns Parser of the Room
     itemParser :: Parser Room
     itemParser = do
         roomNumber<-parseRoomNumber
@@ -45,20 +45,16 @@ module Engine.Room where
         roomDesc<-parseRoomDesc
         return (Room roomNumber roomName roomDesc)
 
-    -- | This function parses the Room and skips the end of the line
+    -- | This function returns Parser of the Room and skips the end of the line
     itemsParser :: Parser Room
     itemsParser = do
         x<-itemParser
         sat isEnd
         return x
 
-    -- | This function parses the list of the Room
+    -- | This function returns Parser of the list of the Room
     initializeRooms :: Parser [Room]
     initializeRooms = many itemsParser
-
-    -- | This function returns the description of the given Room
-    roomDescription::Room->String
-    roomDescription (Room _ _ roomDesc) = roomDesc
 
     
 

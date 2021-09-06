@@ -24,30 +24,31 @@ module Engine.Action where
         used::Int 
     }deriving(Show)
     
+    -- | This is the definition of == function for data type Action
     instance Eq Action where 
-        (Action act1 _ _ _ _ _ _)==(Action act2 _ _ _ _ _ _) = act1==act2
+        (Action actDecs1 _ _ _ _ _ _)==(Action actDecs2 _ _ _ _ _ _) = actDecs1==actDecs2
 
     -- | This function checks if the given string is the description of the given Action
-    (=*)::String->Action->Bool 
-    (=*) str (Action act _ _ _ _ _ _) = str == act
+    isActDesc::String->Action->Bool 
+    isActDesc str (Action actDecs _ _ _ _ _ _) = str == actDecs
 
     -- | This function reads the file containing Actions data
     readActionFile :: IO String
     readActionFile = readFile "src/Data/Actions.txt"
 
-    -- | This function parses fields of the Action that are strings
+    -- | This function returns Parser of fields of the Action that are strings
     parseActionString :: Parser String
     parseActionString = many (sat isntSemi)
 
-    -- | This function parses fields of the Action that are integers
+    -- | This function returns Parser of fields of the Action that are integers
     parseActionInt :: Parser Int
     parseActionInt = read <$> many (sat isntSemi)
 
-    -- | This function parses the number describing whether or not the Action has been performed
+    -- | This function returns Parser of the number describing whether or not the Action has been performed
     parseActionUsed:: Parser Int
     parseActionUsed = read <$> many (sat isntEnd)
 
-    -- | This function parses the Action
+    -- | This function returns Parser of the Action
     actionParser :: Parser Action
     actionParser = do
         actDesc<-parseActionString
@@ -65,30 +66,24 @@ module Engine.Action where
         actUsed<-parseActionUsed
         return (Action actDesc actType actReq actSucc actFail actEffect actUsed)
 
-    -- | This function parses the Action and skips the end of the line
+    -- | This function returns Parser of the Action and skips the end of the line
     actionsParser :: Parser Action
     actionsParser = do
         x<-actionParser
         sat isEnd
         return x
 
-    -- | This function parses the list of the Actions
+    -- | This function returns Parser of the list of the Actions
     initializeActions :: Parser [Action]
     initializeActions = many actionsParser
 
     -- | This function determines whether or not the given Action can be performed based on the actReq argument
     canBeUsed::[Item]->Int->Action->Bool 
     canBeUsed items currRoom (Action _ actType actReq _ _ _ _)
-        | actType==2 && any (actReq =**) items = True 
+        | actType==2 && any (isOwnedItem actReq) items = True 
         | (actType==1 || actType==3) && actReq==currRoom = True 
         | otherwise = False
 
     -- | This function changes the actUsed argument of the Action to 1 meaning the action has been performed succesfully
     use:: Action -> Action
     use (Action actDesc actType actReq actSucc actFail actEffect actUsed) = Action actDesc actType actReq actSucc actFail actEffect 1
-    
-    -- | This function returns the type of the given Action
-    actionType::Action ->Int
-    actionType (Action _ actType _ _ _ _ _) = actType
-
-    

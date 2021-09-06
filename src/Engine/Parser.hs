@@ -7,13 +7,13 @@ module Engine.Parser where
     -- | This is the definition of a Parser
     type Parser a = StateT String [] a
 
-    -- | This function parses the first character
+    -- | This function returns Parser of the first character
     character :: Parser Char
     character = StateT $ \case
                         []     -> []
                         (x:xs) -> [(x,xs)]
 
-    -- | This function parses the first character if it fulfills the given condition
+    -- | This function returns Parser of the first character if it fulfills the given condition
     sat :: (Char -> Bool) -> Parser Char
     sat chi = do
         x <- character
