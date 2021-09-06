@@ -2,3 +2,4 @@
 1;Key;It looks like it opens a door.;0
 2;Book;It smells really nice.;0
 3;Kettle;It's cold.;0
+4;Window;Blinds are covering the view.;0
