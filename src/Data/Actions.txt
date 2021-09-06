@@ -5,3 +5,4 @@ check window;3;1;You checked the window. ;You cannot check the window. ;4;0
 open door;2;1;You opened the door. ;The dook is locked. ;2;0
 check kettle;3;2;You checked the kettle. ;You cannot check the kettle. ;3;0
 open window;2;0;You opened the window. ;You cannot open the window. ;3;0
+go back;2;0;You went back to the bedroom. ;You cannot go back. ;1;0
