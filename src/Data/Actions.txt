@@ -1,4 +1,6 @@
 check inventory;0;-;-;-;-;-
-pick up key;1;1;You picked up the key. ;-;1;0
-pick up book;1;1;You picked up the book. ;-;2;0
+pick up key;1;1;You picked up the key. ;You cannot check pick up the book. ;1;0
+pick up book;1;1;You picked up the book. ;You cannot check pick up the book. ;2;0
 open door;2;1;You opened the door. ;The dook is locked. ;2;0
+check kettle;3;2;You checked the kettle. ;You cannot check the kettle. ;3;0
+open window;2;0;You opened the window. ;You cannot open the window. ;3;0

@@ -15,7 +15,7 @@ import Engine.Game
 play = do
   act <- lift readAction
   info <- updateGame act
-  unless (info == "You are outside.") $ do
+  unless (last (lines info) == "You are outside.") $ do
     play
 
 -- | This is the main function that starts the game
@@ -23,4 +23,5 @@ main :: IO ()
 main =  do
   firstState <- execStateT initializeGame (GameState [] [] [] 0 "")
   evalStateT play firstState
+  putStr "Congratulations, you escaped!"
   return ()

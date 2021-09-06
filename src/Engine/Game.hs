@@ -50,7 +50,7 @@ module Engine.Game where
     checkInventory::[Item]->String
     checkInventory items = do
             let itemsOwned = filter (1>=*) items
-            if null itemsOwned then "Your inventory is empty. " else "Items in your inventory: \n" ++ itemsDescription itemsOwned
+            if null itemsOwned then "Your inventory is empty. " else "Items in your inventory:" ++ itemsDescription itemsOwned
 
     -- | This function returns description of the item from the given list of items based on the given number of the item
     itemInfo::[Item]->Int->String
@@ -68,16 +68,19 @@ module Engine.Game where
     updageGameState::Bool->Action->Int->[Room]->[Item]->(Int, [Item], String)
     updageGameState canCurrActionBeUsed (Action _ actType _ actSucc actFail actEffect _) currRoom rooms items
         |actType==0 = (currRoom, items, checkInventory items ++ "\n")
+        |actType==(-1) = (currRoom, items, "You cannot perform this action. \n")
         |canCurrActionBeUsed && actType==1 = (currRoom, addItems actEffect items, actSucc ++ itemInfo items actEffect ++ "\n")
-        |canCurrActionBeUsed && actType==2 = (actEffect, items, actSucc ++ roomInfo rooms actEffect ++ "\n")
+        |canCurrActionBeUsed && actType==2 = (actEffect, items, actSucc ++ "\n" ++ roomInfo rooms actEffect ++ "\n")
+        |canCurrActionBeUsed && actType==3 = (currRoom, items, actSucc ++ itemInfo items actEffect ++ "\n")
         |otherwise = (currRoom, items, actFail ++ "\n")
 
     -- | This function changes the state of the game based on the given description of the action
     makeAction:: String-> GameState -> GameState
     makeAction act (GameState rooms items actions currRoom info) = 
         GameState rooms newItems newActions newCurrRoom newInfo where
-            newActions = map (\action -> if act =* action && canBeUsed items currRoom action then use action else action) actions
-            currAction = head (filter (act =*) actions)
+            currActions = filter (act =*) actions
+            currAction = if null currActions then Action "" (-1) 0 "" "" 0 0 else head currActions
+            newActions = map (\action -> if currAction == action && canBeUsed items currRoom action then use action else action) actions
             canCurrActionBeUsed = canBeUsed items currRoom currAction
             (newCurrRoom, newItems, newInfo) = updageGameState canCurrActionBeUsed currAction currRoom rooms items
     

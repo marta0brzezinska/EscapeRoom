@@ -30,7 +30,7 @@ module Engine.Item where
     (=***) actEffect (Item itemNumber _ _ _) = itemNumber==actEffect
 
     (>=*)::Int->Item->Bool
-    (>=*) int (Item _ _ _ itemOwned) = itemOwned>=int
+    (>=*) int (Item itemNumber _ _ itemOwned) = itemNumber>0 && itemOwned>=int
 
     -- | This function reads the file containing Items data
     readItemFile :: IO String
@@ -81,4 +81,4 @@ module Engine.Item where
 
     itemsDescription::[Item]->String
     itemsDescription [] = ""
-    itemsDescription (item:items) = show item ++ "\n" ++ itemsDescription items
+    itemsDescription (item:items) = "\n" ++ show item ++ itemsDescription items

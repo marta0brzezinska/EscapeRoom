@@ -24,6 +24,9 @@ module Engine.Action where
         used::Int 
     }deriving(Show)
     
+    instance Eq Action where 
+        (Action act1 _ _ _ _ _ _)==(Action act2 _ _ _ _ _ _) = act1==act2
+
     -- | This function checks if the given string is the description of the given Action
     (=*)::String->Action->Bool 
     (=*) str (Action act _ _ _ _ _ _) = str == act
@@ -77,7 +80,7 @@ module Engine.Action where
     canBeUsed::[Item]->Int->Action->Bool 
     canBeUsed items currRoom (Action _ actType actReq _ _ _ _)
         | actType==2 && any (actReq =**) items = True 
-        | actType==1 && actReq==currRoom = True 
+        | (actType==1 || actType==3) && actReq==currRoom = True 
         | otherwise = False
 
     -- | This function changes the actUsed argument of the Action to 1 meaning the action has been performed succesfully
