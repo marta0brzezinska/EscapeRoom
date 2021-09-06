@@ -14,10 +14,6 @@ module Engine.Room where
         -- | This is the description of the Room
         roomDesc::String
     }deriving(Show)
-
-    -- | This function checks if the given integer is the number of the given Room
-    isRoomNumber::Int->Room->Bool 
-    isRoomNumber actEffect (Room roomNumber _ _) = roomNumber==actEffect
     
     -- | This function reads the file containing Rooms data
     readRoomFile :: IO String
@@ -56,7 +52,6 @@ module Engine.Room where
     initializeRooms :: Parser [Room]
     initializeRooms = many itemsParser
 
-    
-
-
-    
+    -- | This function checks if the given integer is the number of the given Room
+    isRoomNumber::Int->Room->Bool 
+    isRoomNumber actEffect (Room roomNumber _ _) = roomNumber==actEffect

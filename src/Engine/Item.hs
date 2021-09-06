@@ -21,18 +21,9 @@ module Engine.Item where
     instance Show Item where
          show (Item _ itemName itemDesc itemOwned) = itemName ++ ": " ++ itemDesc ++ " You have " ++ show itemOwned ++ " of them."
 
-    -- | This function checks if the given integer is the number of the given Item and if the item is owned by the player
-    isOwnedItem::Int->Item->Bool 
-    isOwnedItem actReq (Item itemNumber _ _ itemOwned) = itemOwned>=1 && itemNumber==actReq
-
-    -- | This function checks if the given integer is the number of the given Item
-    isItemNumber::Int->Item->Bool 
-    isItemNumber actEffect (Item itemNumber _ _ _) = itemNumber==actEffect
-
-    -- | This function checks if actual Item is owned in at least int copies
-    isOwnedInCopies::Int->Item->Bool
-    isOwnedInCopies int (Item itemNumber _ _ itemOwned) = itemNumber>0 && itemOwned>=int
-
+    -- | This is the definition of == function for data type Item
+    instance Eq Item where 
+        item1 == item2 = (itemNumber item1==itemNumber item2 && itemName item1==itemName item2 && itemDesc item1==itemDesc item2 && itemOwned item1==itemOwned item2)
     -- | This function reads the file containing Items data
     readItemFile :: IO String
     readItemFile = readFile "src/Data/Items.txt"
@@ -80,3 +71,15 @@ module Engine.Item where
     itemsDescription::[Item]->String
     itemsDescription [] = ""
     itemsDescription (item:items) = "\n" ++ show item ++ itemsDescription items
+
+    -- | This function checks if the given integer is the number of the given Item and if the item is owned by the player
+    isOwnedItem::Int->Item->Bool 
+    isOwnedItem actReq (Item itemNumber _ _ itemOwned) = itemOwned>=1 && itemNumber==actReq
+
+    -- | This function checks if the given integer is the number of the given Item
+    isItemNumber::Int->Item->Bool 
+    isItemNumber actEffect (Item itemNumber _ _ _) = itemNumber==actEffect
+
+    -- | This function checks if actual Item is owned in at least int copies
+    isOwnedInCopies::Int->Item->Bool
+    isOwnedInCopies int (Item itemNumber _ _ itemOwned) = itemNumber>0 && itemOwned>=int

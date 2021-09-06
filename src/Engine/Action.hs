@@ -28,10 +28,6 @@ module Engine.Action where
     instance Eq Action where 
         (Action actDecs1 _ _ _ _ _ _)==(Action actDecs2 _ _ _ _ _ _) = actDecs1==actDecs2
 
-    -- | This function checks if the given string is the description of the given Action
-    isActDesc::String->Action->Bool 
-    isActDesc str (Action actDecs _ _ _ _ _ _) = str == actDecs
-
     -- | This function reads the file containing Actions data
     readActionFile :: IO String
     readActionFile = readFile "src/Data/Actions.txt"
@@ -76,6 +72,10 @@ module Engine.Action where
     -- | This function returns Parser of the list of the Actions
     initializeActions :: Parser [Action]
     initializeActions = many actionsParser
+
+    -- | This function checks if the given string is the description of the given Action
+    isActDesc::String->Action->Bool 
+    isActDesc str (Action actDecs _ _ _ _ _ _) = str == actDecs
 
     -- | This function determines whether or not the given Action can be performed based on the actReq argument
     canBeUsed::[Item]->Int->Action->Bool 

@@ -61,9 +61,11 @@ test-suite EscapeRoom-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      ActionTest
       GameTest
       ItemTest
       ParserTest
+      RoomTest
       Paths_EscapeRoom
   hs-source-dirs:
       test
