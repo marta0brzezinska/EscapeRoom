@@ -1,8 +1,8 @@
-check inventory;0;-;-;-;-;-
-pick up key;1;1;You picked up the key. ;You cannot check pick up the book. ;1;0
-pick up book;1;1;You picked up the book. ;You cannot check pick up the book. ;2;0
-check window;3;1;You checked the window. ;You cannot check the window. ;4;0
-open door;2;1;You opened the door. ;The dook is locked. ;2;0
-check kettle;3;2;You checked the kettle. ;You cannot check the kettle. ;3;0
-open window;2;0;You opened the window. ;You cannot open the window. ;3;0
-go back;2;0;You went back to the bedroom. ;You cannot go back. ;1;0
+check inventory;0;-;-;-;-;-;100
+pick up key;1;1;0;You picked up the key. ;You cannot pick up the key. ;1;1
+pick up book;1;1;0;You picked up the book. ;You cannot pick up the book. ;2;5
+check window;3;1;0;You checked the window. ;The window doesn't seem to be locked. ;4;100
+open door;2;1;1;You opened the door. ;The dook is locked. ;2;100
+check kettle;3;2;0;You checked the kettle. ;You cannot check the kettle. ;3;100
+open window;2;2;0;You opened the window. ;You cannot open the window. ;3;1
+go back;2;2;0;You went back to the bedroom. ;You cannot go back. ;1;100

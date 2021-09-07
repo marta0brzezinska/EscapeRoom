@@ -78,7 +78,7 @@ module Engine.Game where
         [Item]->
         -- | returned updated values of currRoom, items and info
         (Int, [Item], String)
-    updageGameState canCurrActionBeUsed (Action _ actType _ actSucc actFail actEffect _) currRoom rooms items
+    updageGameState canCurrActionBeUsed (Action _ actType _ _ actSucc actFail actEffect _) currRoom rooms items
         |actType==0 = (currRoom, items, checkInventory items ++ "\n")
         |actType==(-1) = (currRoom, items, "You cannot perform this action. \n")
         |canCurrActionBeUsed && actType==1 = (currRoom, addItems actEffect items, actSucc ++ itemInfo items actEffect ++ "\n")
@@ -91,7 +91,7 @@ module Engine.Game where
     makeAction act (GameState rooms items actions currRoom _) = 
         GameState rooms newItems newActions newCurrRoom newInfo where
             currActions = filter (isActDesc act) actions
-            currAction = if null currActions then Action "" (-1) 0 "" "" 0 0 else head currActions
+            currAction = if null currActions then Action "" (-1) 0 0 "" "" 0 0 else head currActions
             newActions = map (\action -> if currAction == action && canBeUsed items currRoom action then use action else action) actions
             canCurrActionBeUsed = canBeUsed items currRoom currAction
             (newCurrRoom, newItems, newInfo) = updageGameState canCurrActionBeUsed currAction currRoom rooms items
